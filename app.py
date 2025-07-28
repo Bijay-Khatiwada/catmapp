@@ -10,9 +10,9 @@ app = Flask(__name__)
 
 CORS(app)
 
-client = MongoClient("mongodb+srv://<user>:<pass>@cluster0.mongodb.net/?retryWrites=true&w=majority&ssl=true&tls=true&tlsAllowInvalidCertificates=true&tlsInsecure=true")
-
-
+client = MongoClient(
+  "mongodb+srv://bijaymstry:Ob0hqn0hidUbPhrM@cluster0.qewaugl.mongodb.net/?retryWrites=true&w=majority"
+)
 db = client.bizDB # select the database
 tasks = db.tasks_data # selects the collection 
 
