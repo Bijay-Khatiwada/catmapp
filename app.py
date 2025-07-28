@@ -5,17 +5,27 @@ from flask import Flask, jsonify, make_response, request
 from pymongo import MongoClient
 from bson import ObjectId
 from flask_cors import CORS
+from pymongo.errors import ServerSelectionTimeoutError
 
+
+    # return an error response or handle accordingly
 app = Flask(__name__)
 
 CORS(app)
 
-client = MongoClient(
-  "mongodb+srv://bijaymstry:Ob0hqn0hidUbPhrM@cluster0.qewaugl.mongodb.net/?retryWrites=true&w=majority"
-)
-db = client.bizDB # select the database
-tasks = db.tasks_data # selects the collection 
+# client = MongoClient(
+#   "mongodb+srv://bijaymstry:Ob0hqn0hidUbPhrM@cluster0.qewaugl.mongodb.net/?retryWrites=true&w=majority"
+# )
+# db = client.bizDB # select the database
+# tasks = db.tasks_data # selects the collection 
+try:
+    client = MongoClient("mongodb+srv://bijaymstry:Ob0hqn0hidUbPhrM@cluster0.qewaugl.mongodb.net/?retryWrites=true&w=majority", serverSelectionTimeoutMS=5000)
+    db = client.bizDB
+    tasks = db.tasks_data
+except ServerSelectionTimeoutError:
+    print("Could not connect to MongoDB - server selection timed out")
 
+    
 @app.route("/task-summary/time", methods=["GET"])
 def get_task_summary():
     """ Return all tasks in JSON format"""
